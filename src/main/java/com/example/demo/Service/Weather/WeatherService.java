@@ -1,6 +1,6 @@
 package com.example.demo.Service.Weather;
 
-import com.example.demo.JSONJacksonWeather.WeatherNow;
+import com.example.demo.Config.JSON.JSONJacksonWeather.WeatherNow;
 import com.example.demo.DAO.WeatherClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -24,6 +24,10 @@ public class StatesFacoty extends WeatherBotFacade {
     Search_now search_now = new Search_now();
     @Autowired
     SetCity setcity = new SetCity();
+    @Autowired
+    ForecastWeather forecastWeather = new ForecastWeather();
+    @Autowired
+    ForecastWeatherSearch forecastWeatherSearch = new ForecastWeatherSearch();
 
 
     public States statesFactory(Update update, Long chatId, String messageText, String userFirstName) {
@@ -62,6 +66,11 @@ public class StatesFacoty extends WeatherBotFacade {
         if (botState == BotState.SET_CITY) {
             states = setcity;
         }
+        if (botState == BotState.FORECAST) {
+            states = forecastWeather;
+        }
+        if (botState == BotState.FORECAST_NOW)
+            states = forecastWeatherSearch;
 
         return states;
     }

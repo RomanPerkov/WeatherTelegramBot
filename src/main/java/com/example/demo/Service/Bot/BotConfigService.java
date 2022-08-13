@@ -35,4 +35,12 @@ public class BotConfigService {
         return botConfig.getAccessToken();
     }
 
+    public String getGeoCoding() {
+        return botConfig.getGeoCoding();
+    }
+
+    public String getForecastWeatherApi(){
+        return botConfig.getForecastWeatherApiTemp();
+    }
+
 }

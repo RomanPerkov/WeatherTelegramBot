@@ -5,5 +5,5 @@ package com.example.demo.Contsants;
  */
 
 public enum MainCommand {
-    START,HELP,CITY,SETCITY,NOW,CANCEL
+    START,HELP,CITY,SETCITY,NOW,CANCEL,FORECAST
 }

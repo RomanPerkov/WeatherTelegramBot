@@ -1,4 +1,4 @@
-package com.example.demo.JSONJacksonWeather;
+package com.example.demo.Config.JSON.JSONJacksonWeather;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

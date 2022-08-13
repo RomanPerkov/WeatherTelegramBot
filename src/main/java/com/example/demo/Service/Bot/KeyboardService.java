@@ -3,6 +3,7 @@ package com.example.demo.Service.Bot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
@@ -18,8 +19,9 @@ public class KeyboardService {
     @Autowired
     private ChatConfigService chatConfigService;
 
-    private final InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup(); //клавиатура
-
+    private final
+    InlineKeyboardMarkup keyboard = new InlineKeyboardMarkup(); //клавиатура
+    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 
     /**
      * Создание клавиатуры с кнопками

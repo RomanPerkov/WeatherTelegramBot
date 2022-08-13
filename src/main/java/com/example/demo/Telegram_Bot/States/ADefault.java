@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class ADefault extends WeatherBotFacade implements States  {
+public class ADefault extends WeatherBotFacade implements States {
 
 
 
@@ -17,6 +17,7 @@ public class ADefault extends WeatherBotFacade implements States  {
         // /help - Список команд
         if (messageText.equals(MainCommand.HELP.name())) {
             sendMessage(update, messageGenerator.generateHelpMessage());
+            ;
         }
 
         // /setcity - Установка стандартного города
@@ -35,7 +36,16 @@ public class ADefault extends WeatherBotFacade implements States  {
         // /now - Узнать текущую погоду
         else if (messageText.equals(MainCommand.NOW.name())) {
             chatConfigService.setBotState(chatId, BotState.NOW);
-            sendMessage(update, "Выберите город", KeyboardType.CITY_CHOOSE);
+            sendMessage(update, "Выберите город", KeyboardType.CITY_CHOOSE);// отправляем сообщение м вызываем клавиатуру
+            System.out.println("NOW");
+
+
+        // /forecast - узнать прогноз погоды
+        }else if (messageText.equals(MainCommand.FORECAST.name())){
+            chatConfigService.setBotState(chatId, BotState.FORECAST);
+            sendMessage(update, "Введите город", KeyboardType.CITY_CHOOSE);
+            System.out.println("FORECAST");
+
         }
 
 

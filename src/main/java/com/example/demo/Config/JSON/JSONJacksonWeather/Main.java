@@ -1,4 +1,4 @@
-package com.example.demo.JSONJacksonWeather;
+package com.example.demo.Config.JSON.JSONJacksonWeather;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.Setter;
  */
 public class Main {
     private Integer temp;
-    private String pressure;
+    private Double pressure;
     private String humidity;
 
     @JsonProperty("feels_like")

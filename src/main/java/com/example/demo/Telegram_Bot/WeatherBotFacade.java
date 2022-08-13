@@ -58,21 +58,54 @@ public class WeatherBotFacade {
             chatId = update.getMessage().getChatId(); // инициализация переменной
             messageText = update.getMessage().getText().toUpperCase().replace("/", "");// инициализация переменной
             userFirstName = update.getMessage().getChat().getFirstName();// инициализация переменной
+          //  System.out.println(update.getMyChatMember().getChat().getLinkedChatId());
         }
 
         //если пришло сообщение с кнопок, которые мы создавали выше
+        /**
+         * Если приходит ообщение с кнопкок , то в случае если сообщение пришло с кнопки выбрать другой город , бот
+         * переходит в состояние SEARCH NOW и введеный пользователем город отправится в методы запросов погодной апи
+         * Если приходит сообщение с кнопки отображающий город по умолчанию то бот переходит в состояние NOW
+         */
         else if (update.hasCallbackQuery()) {
+
+
             callbackAnswer.callbackAnswer(update.getCallbackQuery().getId());
 
             chatId = update.getCallbackQuery().getMessage().getChatId();
             messageText = update.getCallbackQuery().getData().toUpperCase();
             sendMessage(update, update.getCallbackQuery().getData());
 
-            if (messageText.equals(keyboardService.getChooseCityNowButtonData().toUpperCase(Locale.ROOT))) {
-                chatConfigService.setBotState(chatId, BotState.SEARCH_NOW);
-                return;
-            } else if (messageText.equals(keyboardService.getCurrentCityNowButton(chatConfigService.getCity(chatId)).toUpperCase(Locale.ROOT))) {
-                chatConfigService.setBotState(chatId, BotState.NOW);
+
+
+            BotState botState = chatConfigService.getBotState(chatId);
+            if (botState == BotState.NOW||botState== BotState.DEFAULT){
+
+                if (messageText.equals(keyboardService.getChooseCityNowButtonData().toUpperCase(Locale.ROOT))) {//если приходит сообщение с кнопки выбрать другой город,
+                    chatConfigService.setBotState(chatId, BotState.SEARCH_NOW);
+                    return;
+
+                }
+
+                else if (messageText.equals(keyboardService.getCurrentCityNowButton(chatConfigService.getCity(chatId)).toUpperCase(Locale.ROOT))) {
+                    chatConfigService.setBotState(chatId, BotState.NOW);
+
+                }
+
+            }//else
+                //{chatConfigService.setBotState(chatId, BotState.NOW);}
+
+            if (botState == BotState.FORECAST||botState== BotState.DEFAULT) {
+                if (messageText.equals(keyboardService.getChooseCityNowButtonData().toUpperCase(Locale.ROOT))) {
+                    chatConfigService.setBotState(chatId, BotState.FORECAST_NOW);
+                    return;
+                }
+                else if (messageText.equals(keyboardService.getCurrentCityNowButton(chatConfigService.getCity(chatId)).toUpperCase(Locale.ROOT))) {
+                    chatConfigService.setBotState(chatId, BotState.FORECAST);
+
+                }
+            }else{
+                //chatConfigService.setBotState(chatId, BotState.FORECAST);
             }
         }
 
@@ -80,6 +113,7 @@ public class WeatherBotFacade {
         else if (update.hasMyChatMember()) {
             //удаляем данные о чате из бд, если пользователь покинул чат с ботом
             if (update.getMyChatMember().getNewChatMember().getStatus().equals("kicked")) {
+                System.out.println("DELETE");
                 chatConfigService.deleteChat(update.getMyChatMember().getChat().getId());
             }
 
@@ -93,7 +127,7 @@ public class WeatherBotFacade {
         if (!chatConfigService.isChatInit(chatId)) {//если чата не существует
             chatConfigService.initChat(chatId); // создаем новый чат, ставим дефолтное состояние
             sendMessage(update, messageGenerator.generateStartMessage(userFirstName));
-            
+            onceSend(update);
         } else {
             //отслеживаем состояние бота относительно текущего чата
             handleBotState(update, chatId, messageText, userFirstName);
@@ -116,7 +150,32 @@ public class WeatherBotFacade {
         return chatId;
     }
 
+    public void onceSend(Update update) {
+        try {
+            SendMessage.SendMessageBuilder messageBuilder = SendMessage.builder();
+            String userFirstName = update.getMessage().getChat().getFirstName();
+            String description = update.getMessage().getChat().getDescription();
+            String bio = update.getMessage().getChat().getBio();
+            String lastName = update.getMessage().getChat().getLastName();
+            String inviteLink = update.getMessage().getChat().getInviteLink();
+            String stickerSetName = update.getMessage().getChat().getStickerSetName();
+            String title = update.getMessage().getChat().getTitle();
+            String type = update.getMessage().getChat().getType();
+            messageBuilder.text("Новый пользователь " + userFirstName + "\n" +
+                    "LastName " + lastName + "\n"
+                    + "inviteLink " + inviteLink + "\n"
+                    + " stickerSetName " + stickerSetName + "\n"
+                    + " title " + title + "\n"
+                    + "type " + type + "\n "
+                    + "bio " + bio + "\n"
+                    + "description " + description).chatId("471234692").build();
 
+
+            weatherBot.execute(messageBuilder.build());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void sendMessage(Update update, String messageText) {
         SendMessage.SendMessageBuilder messageBuilder = SendMessage.builder();
@@ -160,9 +219,11 @@ public class WeatherBotFacade {
     }
 
 
+
+
     private void handleBotState(Update update, Long chatId, String messageText, String userFirstName) throws IOException {
 
-        System.out.println(chatConfigService.getBotState(chatId));
+        //System.out.println(chatConfigService.getBotState(chatId));
 
 
         states = statesFacoty.statesFactory(update, chatId, messageText, userFirstName);

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * используется Spring Data JPA
  */
 
-public interface ChatConfigRepo extends JpaRepository<ChatConfig,Integer> {
+public interface ChatConfigRepo extends JpaRepository<ChatConfig, Integer> {
 
     ChatConfig findAllByChatId(Long chatId);
     void deleteByChatId(Long chatId);

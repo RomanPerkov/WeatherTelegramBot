@@ -1,6 +1,6 @@
 package com.example.demo.DAO;
 
-import com.example.demo.JSONJacksonWeather.WeatherNow;
+import com.example.demo.Config.JSON.JSONJacksonWeather.WeatherNow;
 import com.example.demo.Service.Bot.BotConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,9 +30,7 @@ public class WeatherClient {
             System.out.println(weatherNow);
             return weatherNow;
 
-//            return restTemplate.getForObject(botConfigService.getNowApiTemp()
-//                            .replace("{qqq}",city),
-//                    WeatherNow.class);
+
         }catch (Exception e){
             e.printStackTrace();
             return null;

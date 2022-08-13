@@ -28,7 +28,7 @@ public class ChatConfigService  {
         chatConfigRepo.deleteByChatId(chatId);
     }
 
-    public void setBotState(Long chatId,BotState botState){             // изменяет состояние бота
+    public void setBotState(Long chatId, BotState botState){             // изменяет состояние бота
         ChatConfig chatConfig = chatConfigRepo.findAllByChatId(chatId);
         chatConfig.setBotState(botState);
         chatConfigRepo.save(chatConfig);
@@ -39,7 +39,7 @@ public class ChatConfigService  {
     }
 
 
-    public void setCity(Long chatId,String city){
+    public void setCity(Long chatId, String city){
         ChatConfig chatConfig = chatConfigRepo.findAllByChatId(chatId);
         chatConfig.setCity(city);
         chatConfigRepo.save(chatConfig);
